@@ -99,7 +99,7 @@ image:
 
 elasticsearch:
   image: docker.elastic.co/elasticsearch/elasticsearch
-  tag: "8.11.2"
+  tag: "8.15.2"
   pullPolicy: IfNotPresent
 
 service:
