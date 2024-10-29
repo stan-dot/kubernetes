@@ -93,7 +93,7 @@ tolerations: []
 affinity: {}
 
 image:
-  image: gcr.io/diamond-pubreg/channelfinder/channelfinder
+  repository: gcr.io/diamond-pubreg/channelfinder/channelfinder
   tag: "0.1.0"
   pullPolicy: IfNotPresent
 
