@@ -25,7 +25,7 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io/${{ github.repository_owner }} --username ${{ github.repository_owner }} --password-stdin
 
-          REGISTRY=oci://ghcr.io/epics-containers
+          REGISTRY=oci://ghcr.io/diamondlightsource
           set -x
 
           # helm tags must be SemVar. Use 0.0.0-b0 for testing the latest non-tagged build
@@ -35,14 +35,10 @@ jobs:
             TAG="0.0.0-b0"
           fi
 
-          for chart in helm/*; do
-            (
-              cd $(realpath $chart)
-              NAME=$(sed -n '/^name: */s///p' Chart.yaml)
+          cd helm
+          NAME=channelfinder
 
-              helm package -u --app-version ${TAG} --version ${TAG} .
-              PACKAGE=${NAME}-${TAG}.tgz
+          helm package -u --app-version ${TAG} --version ${TAG} .
+          PACKAGE=${NAME}-${TAG}.tgz
 
-              helm push "$PACKAGE" $REGISTRY
-            )
-          done
+          helm push "$PACKAGE" $REGISTRY
