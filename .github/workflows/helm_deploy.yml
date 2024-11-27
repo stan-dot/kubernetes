@@ -35,7 +35,7 @@ jobs:
             TAG="0.0.0-b0"
           fi
 
-          for chart in Charts/*; do
+          for chart in helm/*; do
             (
               cd $(realpath $chart)
               NAME=$(sed -n '/^name: */s///p' Chart.yaml)
