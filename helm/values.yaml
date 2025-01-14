@@ -99,6 +99,10 @@ service:
 elasticsearchService:
   port: 9200
 
+elasticsearch:
+  tag: 8.5.1
+  image: elastic/elasticsearch
+
 persistence:
   enabled: true
   size: 5Gi
