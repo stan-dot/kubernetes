@@ -92,6 +92,11 @@ tolerations: []
 
 affinity: {}
 
+image:
+  repository: ghcr.io/diamondlightsource/channelfinder
+  tag: 0.0.0-b0
+  pullPolicy: IfNotPresent
+
 service:
   type: ClusterIP
   port: 8080
