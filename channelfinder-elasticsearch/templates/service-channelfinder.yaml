@@ -1,0 +1,13 @@
+# templates/service-channelfinder.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: channelfinderservice
+spec:
+  selector:
+    app: channelfinderservice
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
