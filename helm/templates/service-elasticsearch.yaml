@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "channelfinder-elasticsearch.fullname" . }}-elasticsearch
+  labels:
+    {{- include "channelfinder-elasticsearch.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.elasticsearch.service.type }}
+  ports:
+    - port: {{ .Values.elasticsearch.service.port }}
+      targetPort: 9200
+      protocol: TCP
+      name: http
+  selector:
+    app: elasticsearch

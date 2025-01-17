@@ -112,3 +112,37 @@ persistence:
   enabled: true
   size: 5Gi
   storageClass: ""
+
+# values.yaml
+
+channelfinderservice:
+  image:
+    repository: ghcr.io/channelfinder/channelfinderservice
+    tag: master
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+
+elasticsearch:
+  image:
+    repository: docker.elastic.co/elasticsearch/elasticsearch-wolfi
+    tag: 8.17.0
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 9200
+  resources:
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
