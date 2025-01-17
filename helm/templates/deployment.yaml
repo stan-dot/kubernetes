@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: { { include "channelfinder-elasticsearch.fullname" . } }
-  labels: { { - include "channelfinder-elasticsearch.labels" . | nindent 4 } }
+  name: {{ include "channelfinder-elasticsearch.fullname" . }}
+  labels:
+    {{- include "channelfinder-elasticsearch.labels" . | nindent 4 }}
 spec:
-  replicas: { { .Values.replicas } }
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: { { include "channelfinder-elasticsearch.fullname" . } }
+      app: {{ include "channelfinder-elasticsearch.fullname" . }}
   template:
     metadata:
       labels:
-        app: { { include "channelfinder-elasticsearch.fullname" . } }
+        app: {{ include "channelfinder-elasticsearch.fullname" . }}
     spec:
       containers:
         - name: channelfinderservice
           image: "{{ .Values.channelfinderservice.image.repository }}:{{ .Values.channelfinderservice.image.tag }}"
-          imagePullPolicy: { { .Values.image.pullPolicy } }
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /bin/bash
             - -c
@@ -31,25 +32,25 @@ spec:
               mountPath: /usr/share/elasticsearch/data
           resources:
             limits:
-              cpu: { { .Values.channelfinderservice.resources.limits.cpu } }
-              memory:
-                { { .Values.channelfinderservice.resources.limits.memory } }
+              cpu: {{ .Values.channelfinderservice.resources.limits.cpu }}
+              memory: {{ .Values.channelfinderservice.resources.limits.memory }}
             requests:
-              cpu: { { .Values.channelfinderservice.resources.requests.cpu } }
-              memory:
-                { { .Values.channelfinderservice.resources.requests.memory } }
+              cpu: {{ .Values.channelfinderservice.resources.requests.cpu }}
+              memory: {{ .Values.channelfinderservice.resources.requests.memory }}
         - name: elasticsearch
           image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
           ports:
             - containerPort: 9200
           resources:
             limits:
-              cpu: { { .Values.elasticsearch.resources.limits.cpu } }
-              memory: { { .Values.elasticsearch.resources.limits.memory } }
+              cpu: {{ .Values.elasticsearch.resources.limits.cpu }}
+              memory: {{ .Values.elasticsearch.resources.limits.memory }}
             requests:
-              cpu: { { .Values.elasticsearch.resources.requests.cpu } }
-              memory: { { .Values.elasticsearch.resources.requests.memory } }
+              cpu: {{ .Values.elasticsearch.resources.requests.cpu }}
+              memory: {{ .Values.elasticsearch.resources.requests.memory }}
       volumes:
         - name: es-data
           persistentVolumeClaim:
             claimName: es-data
+
+
