@@ -5,64 +5,35 @@ metadata:
   labels:
     {{- include "channelfinder-elasticsearch.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      {{- include "channelfinder-elasticsearch.selectorLabels" . | nindent 6 }}
+      app: {{ include "channelfinder-elasticsearch.fullname" . }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "channelfinder-elasticsearch.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        app: {{ include "channelfinder-elasticsearch.fullname" . }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "channelfinder-elasticsearch.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: channelfinderservice
+          image: "{{ .Values.channelfinderservice.image.repository }}:{{ .Values.channelfinderservice.image.tag }}"
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
-          readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            - containerPort: 8080
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+            limits:
+              cpu: {{ .Values.channelfinderservice.resources.limits.cpu }}
+              memory: {{ .Values.channelfinderservice.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.channelfinderservice.resources.requests.cpu }}
+              memory: {{ .Values.channelfinderservice.resources.requests.memory }}
+        - name: elasticsearch
+          image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
+          ports:
+            - containerPort: 9200
+          resources:
+            limits:
+              cpu: {{ .Values.elasticsearch.resources.limits.cpu }}
+              memory: {{ .Values.elasticsearch.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.elasticsearch.resources.requests.cpu }}
+              memory: {{ .Values.elasticsearch.resources.requests.memory }}

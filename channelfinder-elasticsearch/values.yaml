@@ -109,12 +109,16 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+# values.yaml
 
 channelfinderservice:
   image:
     repository: ghcr.io/channelfinder/channelfinderservice
     tag: master
   replicas: 1
+  service:
+    type: ClusterIP
+    port: 80
   resources:
     limits:
       cpu: "500m"
@@ -128,6 +132,9 @@ elasticsearch:
     repository: docker.elastic.co/elasticsearch/elasticsearch-wolfi
     tag: 8.17.0
   replicas: 1
+  service:
+    type: ClusterIP
+    port: 9200
   resources:
     limits:
       cpu: "1"

@@ -1,13 +1,15 @@
-# templates/service-channelfinder.yaml
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: channelfinderservice
+  name: {{ include "channelfinder-elasticsearch.fullname" . }}-channelfinderservice
+  labels:
+    {{- include "channelfinder-elasticsearch.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.channelfinderservice.service.type }}
+  ports:
+    - port: {{ .Values.channelfinderservice.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: channelfinderservice
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
