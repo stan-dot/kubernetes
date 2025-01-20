@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "channelfinder-elasticsearch.fullname" . }}
+  name: channelfinder-elasticsearch
   labels:
     {{- include "channelfinder-elasticsearch.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ include "channelfinder-elasticsearch.fullname" . }}
+      app: channelfinder-elasticsearch
   template:
     metadata:
       labels:
-        app: {{ include "channelfinder-elasticsearch.fullname" . }}
+        app: channelfinder-elasticsearch
     spec:
       containers:
         - name: channelfinderservice
@@ -26,6 +26,8 @@ spec:
             requests:
               cpu: {{ .Values.channelfinderservice.resources.requests.cpu }}
               memory: {{ .Values.channelfinderservice.resources.requests.memory }}
+          environment:
+            - ELASTICSEARCH_NETWORK_HOST: elasticsearch-cf
         - name: elasticsearch
           image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
           ports:
@@ -37,3 +39,6 @@ spec:
             requests:
               cpu: {{ .Values.elasticsearch.resources.requests.cpu }}
               memory: {{ .Values.elasticsearch.resources.requests.memory }}
+          envFrom:
+            - configMapRef:
+              name: channelfinder-config

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: channelfinder-config
+data:
+  cluster.name: "channelfinder"
+  discovery.type: "single-node"
+  bootstrap.memory_lock: "true"
+  xpack.security.enabled: "false"
+  EPICS_PVAS_INTF_ADDR_LIST: "0.0.0.0"
